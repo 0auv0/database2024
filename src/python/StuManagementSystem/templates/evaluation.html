@@ -1,0 +1,135 @@
+{%extends "base.html" %}
+{% block mainbody %}
+<div class="row container-fuild h4 p-3">
+        <div class="col-1"></div>
+        <div class="col-10 border border-4 p-2">
+            {% if messages %}
+    <div class="error ">
+        {% for message in messages %}
+        <div class="alert alert-danger alert-dismissible fade show">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <strong>{{ message }}</strong>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+        <table class="table table-hover">
+            {% if not user.is_superuser %}
+    <thead>
+      <tr>
+        <th>评价类型</th>
+        <th>评价课程</th>
+      </tr>
+    </thead>
+            {% endif %}
+    <tbody>
+    {% for p in evaluation %}
+      <tr>
+          <td>
+              {% if p.12 == 0%}
+                最喜欢的课程
+              {% elif p.12 == 1 %}
+                最不喜欢的课程
+              {% elif p.12 == 2%}
+                得分最高的课程
+              {% elif p.12 == 3 %}
+                得分最低的课程
+              {% elif p.12 == 4%}
+                教材最好的课程
+              {% elif p.12 == 5 %}
+                助教最好的课程
+              {% elif p.12 == 6%}
+                老师最好的课程
+              {% elif p.12 == 7 %}
+                真正改变人生的课程
+              {% endif %}
+
+          </td>
+          <td>{{p.8}}</td>
+          <td>
+          <form method="post">
+              {% csrf_token %}
+              <input type="hidden" name="sid" value="{{user.username}}">
+                <input type="hidden" name="cid" value="{{p.7}}">
+                <input type="hidden" name="type" value="{{p.12}}">
+                <button type="submit" name="delete_evaluation" class="btn btn-sm btn-danger">删除</button>
+          </form>
+          </td>
+      </tr>
+    {% empty %}
+    <tr>
+            <td colspan="3">暂无评价</td>
+    </tr>
+    {% endfor %}
+
+
+    </tbody>
+  </table>
+
+        </div>
+        <div class="col-1"></div>
+    </div>
+
+<div class="row container-fuild h4 p-3">
+    <div class="col-1"></div>
+    <div class="col-10">
+
+        <h2>课程类型代码</h2>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>类型</th>
+        <th>类型介绍</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>0</td>
+        <td>最喜欢的课程</td>
+      </tr>
+        <tr>
+            <td>1</td>
+            <td>最不喜欢的课程</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>得分最高的课程</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>得分最低的课程</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>教材最好的课程</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>助教最好的课程</td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>老师最好的课程</td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td>真正改变人生的课程</td>
+        </tr>
+    </tbody>
+</table>
+
+         <h2>添加评价</h2>
+        <form method="post">
+            {% csrf_token %}
+                <input type="hidden" name="sid" value="{{user.username}}">
+                <label>评价类型：</label>
+                <input name="type" value="">
+                <lable>课程号</lable>
+                <input name="cid" value="">
+            <button type="submit" name="add_evaluation" class="btn btn-primary">保存</button>
+        </form>
+
+    </div>
+    <div class="col-1"></div>
+</div>
+{% endblock %}

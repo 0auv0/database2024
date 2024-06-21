@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>学籍管理系统</title>
+</head>
+<body>
+    <!-- templates/navbar.html -->
+
+<nav id="nav" class="navbar navbar-expand-sm bg-primary navbar-dark sticky-top">
+			<div class="container-fluid">
+				<img class="navbar-brand ms-4" src="https://email.ustc.edu.cn/coremail/s?func=lp:getImg&org_id=&img_id=logo_001" width="200px">
+
+				<div class=" collapse navbar-collapse" id="navbarCollapse">
+					<div class=" col-sm-3 pb-1 navbar-nav">
+						<div class="col-1"></div>
+						<span class="my-auto" style="text-align: center; font-size:1.125rem;"><a href="" style="text-decoration: none; color: #FFFFFF;" target="_blank">
+									学籍管理系统</a></span>
+					</div>
+					<div class="  col-sm-9 pb-1 navbar-nav">
+						<div class="col-sm-2"></div>
+						<div class="container-fluid navbar-collapse col-sm-6 d-flex justify-content-between" id="nav-list">
+							<a class="nav-link nav-item dropdown text-center" target="_blank" href="../">个人信息</a>
+                            <a class="nav-link nav-item dropdown text-center" target="_blank" href="../profession">专业情况</a>
+							<a class="nav-link nav-item dropdown text-center" target="_blank" href="../course">选课情况</a>
+							<a class="nav-link nav-item dropdown text-center" target="_blank" href="../score">个人成绩</a>
+							<a class="nav-link nav-item dropdown text-center" target="_blank" href="../info">个人奖惩</a>
+							{% if user.is_superuser %}
+								<a class="nav-link nav-item dropdown text-center" target="_blank" href="../admin">管理员</a>
+							{% else %}
+								<a class="nav-link nav-item dropdown text-center" target="_blank" href="../evaluation">课程评价</a>
+							{% endif %}
+						</div>
+						<div class="col-sm-1"></div>
+					</div>
+				</div>
+			</div>
+
+		</nav>
+
+	<div class="container-fuild pt-3 row">
+		<div class="col-2"></div>
+		<div class="col-8">
+			<div class="text-end">
+    <h1>欢迎来到学籍管理系统</h1>
+</div>
+    {% if user.is_authenticated %}
+        <div class="text-end h5">
+            <p>你好, {{ user.username }}! <a href="{% url 'login' %}">登出</a></p>
+        </div>
+			{% block mainbody %}
+       <p>original</p>
+    {% endblock %}
+    {% else %}
+        <div class="text-center">
+            <p>你尚未登录，请 <a href="{% url 'login' %}">登录</a></p>
+        </div>
+			{% endif %}
+		</div>
+		<div class="col-2"></div>
+	</div>
+</body>
+<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+<script src="/static/js/bootstrap.bundle.js"></script>
+<style>
+	.row{
+		margin: 0px!important;
+	}
+	body{
+		background: url(../static/img/bg.gif) repeat;
+	}
+	#pic{
+		width: 100px;
+		height: 100px;
+		border-radius: 50%;
+	}
+</style>
+</html>

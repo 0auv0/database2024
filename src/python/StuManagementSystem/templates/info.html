@@ -1,0 +1,82 @@
+{%extends "base.html" %}
+{% block mainbody %}
+<div class="row container-fuild h4 p-3">
+        <div class="col-1"></div>
+        <div class="col-10 border border-4 p-2">
+            {% if messages %}
+    <div class="error ">
+        {% for message in messages %}
+        <div class="alert alert-danger alert-dismissible fade show">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <strong>{{ message }}</strong>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+        <table class="table table-hover">
+            {% if not user.is_superuser %}
+    <thead>
+      <tr>
+        <th>奖惩类型</th>
+        <th>具体信息</th>
+      </tr>
+    </thead>
+            {% endif %}
+    <tbody>
+      {% for p in info %}
+      <tr>
+
+          {% if user.is_superuser %}
+            <div class="container-fuild border border-dark m-2 p-1" >
+                <form method="post" style="display:inline;">
+                        {% csrf_token %}
+                    <div>
+                        <label>学号：</label>
+                        <input name="sid" value="{{ p.0 }}">
+                    </div>
+                    <div>
+                        <label>姓名：{{ p.4 }}</label>
+                    </div>
+                    <div>
+                        <label>奖惩类型：</label>
+                        <input  name="type" value="{{ p.1 }}">
+                    </div>
+
+                    <div>
+                        <label>具体信息：</label>
+                        <input name="infomation" value="{{ p.2 }}">
+                    </div>
+                        <button type="submit" name="edit_info" class="btn btn-sm btn-primary">编辑</button>
+                        <button type="submit" name="delete_info" class="btn btn-sm btn-danger">删除</button>
+
+                    </form>
+                </div>
+
+          {% else %}
+            <td>{{p.1}}</td>
+            <td>{{p.2}}</td>
+          {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+        </div>
+        <div class="col-1"></div>
+    </div>
+
+<div class="row container-fuild h4 p-3">
+    <div class="col-1"></div>
+    <div class="col-10">
+     {% if user.is_superuser %}
+         <h2>添加奖惩</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" name="add_info" class="btn btn-primary">保存</button>
+        </form>
+        {% endif %}
+    </div>
+    <div class="col-1"></div>
+</div>
+{% endblock %}

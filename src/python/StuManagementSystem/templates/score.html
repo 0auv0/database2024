@@ -1,0 +1,79 @@
+{%extends "base.html" %}
+{% block mainbody %}
+<div class="row container-fuild h4 p-3">
+        <div class="col-1"></div>
+        <div class="col-10 border border-4 p-2">
+            {% if messages %}
+    <div class="error ">
+        {% for message in messages %}
+        <div class="alert alert-danger alert-dismissible fade show">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <strong>{{ message }}</strong>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+        <table class="table table-hover">
+            {% if not user.is_superuser %}
+    <thead>
+      <tr>
+        <th>姓名</th>
+        <th>课程名</th>
+          <th>课程成绩</th>
+      </tr>
+    </thead>
+            {% endif %}
+    <tbody>
+      {% for p in SC %}
+      <tr>
+
+          {% if user.is_superuser %}
+            <div class="container-fuild border border-dark m-2 p-1" >
+                <form method="post" style="display:inline;">
+                        {% csrf_token %}
+                    <div>
+                        <label>姓名：{{ p.1 }}</label>
+                    </div>
+                    <div>
+                        <label>课程名：{{ p.8 }}</label>
+                    </div>
+                    <div>
+                        <label>成绩：</label>
+                        <input  name="score" value="{{ p.13 }}">
+                    </div>
+
+                    <div>
+                        <input type="hidden" name="sid" value="{{ p.0 }}">
+                    </div>
+                    <div>
+                        <input type="hidden" name="cid" value="{{ p.7 }}">
+                    </div>
+                        <button type="submit" name="edit_score" class="btn btn-sm btn-primary">编辑</button>
+                    </form>
+                </div>
+
+          {% else %}
+            <td>{{p.1}}</td>
+            <td>{{p.8}}</td>
+            <td>{{p.13}}</td>
+          {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+        </div>
+        <div class="col-1"></div>
+    </div>
+
+<div class="row container-fuild h4 p-3">
+    <div class="col-1"></div>
+    <div class="col-10">
+        {% if not user.is_superuser %}
+        <h4>您的GPA成绩为</h4>
+        <h5 data-bs-toggle="tooltip" data-bs-placement="right" title="{{ gpa }}">已隐藏</h5>
+        {% endif %}
+    </div>
+    <div class="col-1"></div>
+</div>
+{% endblock %}

@@ -1,0 +1,80 @@
+{%extends "base.html" %}
+{% block mainbody %}
+<div class="row container-fuild h4 p-3">
+        <div class="col-1"></div>
+        <div class="col-10 border border-4 p-2">
+            {% if messages %}
+    <div class="error ">
+        {% for message in messages %}
+        <div class="alert alert-danger alert-dismissible fade show">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <strong>{{ message }}</strong>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+        <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>专业号</th>
+        <th>专业名</th>
+        <th>所属学院</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in profession %}
+      <tr>
+
+          {% if user.is_superuser %}
+            <div class="container-fuild border border-dark m-2 p-1" >
+                <form method="post" style="display:inline;">
+                        {% csrf_token %}
+                    <div>
+                        <label>专业ID：</label>
+                        <input name="pid" value="{{ p.0 }}">
+                    </div>
+
+                    <div>
+                        <label>专业名：</label>
+                        <input  name="pname" value="{{ p.1 }}">
+                    </div>
+
+                    <div>
+                        <label>所属学院：</label>
+                        <input name="academy" value="{{ p.2 }}">
+                    </div>
+                        <button type="submit" name="edit_profession" class="btn btn-sm btn-primary">编辑</button>
+                        <button type="submit" name="delete_profession" class="btn btn-sm btn-danger">删除</button>
+
+                    </form>
+                </div>
+
+          {% else %}
+            <td>{{p.0}}</td>
+            <td>{{p.1}}</td>
+            <td>{{p.2}}</td>
+          {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+        </div>
+        <div class="col-1"></div>
+    </div>
+
+<div class="row container-fuild h4 p-3">
+    <div class="col-1"></div>
+    <div class="col-10">
+     {% if user.is_superuser %}
+         <h2>添加专业</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" name="add_profession" class="btn btn-primary">保存</button>
+        </form>
+        {% endif %}
+    </div>
+    <div class="col-1"></div>
+</div>
+{% endblock %}

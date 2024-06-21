@@ -1,0 +1,127 @@
+{%extends "base.html" %}
+{% block mainbody %}
+<div class="row container-fuild h4 p-3">
+    {% if messages %}
+    <div class="error ">
+        {% for message in messages %}
+        <div class="alert alert-danger alert-dismissible fade show">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <strong>{{ message }}</strong>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+        <div class="col-1"></div>
+        <div class="col-10 border border-4 p-2">
+        <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>课程名</th>
+        <th>课程学分</th>
+        <th>课程类型</th>
+          <th>选修学生</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for sc in SC %}
+      <tr>
+        <td>{{sc.8}}</td>
+        <td>{{sc.9}}</td>
+        <td>{{sc.10}}</td>
+          <td>{{sc.1}}</td>
+          <td>
+              <form method="post" style="display:inline;">
+              {% csrf_token %}
+              <input type="hidden" name="cid" value="{{sc.7}}"> </input>
+              <input type="hidden" name="sid" value="{{sc.0}}"> </input>
+              <button type="submit" name="delete_Sc" class="btn btn-sm btn-primary">取消选课</button>
+            </form>
+          </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+        </div>
+        <div class="col-1"></div>
+    </div>
+
+<div class="row container-fuild h4 p-3">
+    <div class="col-1"></div>
+    <div class="col-10 m-3">
+         <table class="table table-hover">
+             <div class="h4">全部开课情况如下所示：</div>
+    <thead>
+      <tr>
+        <th>课程名</th>
+          <th>课程编码</th>
+        <th>课程学分</th>
+        <th>课程类型</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in course %}
+      {% if user.is_superuser %}
+      <div class="container-fuild border border-dark m-2 p-1" >
+        <form method="post" style="display:inline;">
+                {% csrf_token %}
+            <div>
+                <label>课程ID：</label>
+                <input name="cid" value="{{ c.cid }}">
+            </div>
+
+            <div>
+                <label>课程名：</label>
+                <input  name="cname" value="{{ c.cname }}">
+            </div>
+
+            <div>
+                <label>课程学分：</label>
+                <input name="credit" value="{{ c.credit }}">
+            </div>
+
+            <div>
+                <label>课程类型：</label>
+                <input  name="type" value="{{ c.type }}">
+            </div>
+<!--                <div class="row">-->
+                    <button type="submit" name="edit_course" class="btn btn-sm btn-primary">编辑</button>
+                    <button type="submit" name="delete_course" class="btn btn-sm btn-danger">删除</button>
+<!--                </div>-->
+
+            </form>
+      </div>
+
+      {% else %}
+        <tr>
+        <td>{{c.cname}}</td>
+          <td>{{c.cid}}</td>
+        <td>{{c.credit}}</td>
+        <td>{{c.type}}</td>
+            <td>
+                <form method="post" style="display:inline;">
+              {% csrf_token %}
+              <input type="hidden" name="sid" value="{{user.username}}">
+              <input type="hidden" name="cid" value="{{c.cid}}">
+                <input type="hidden" name="score" value="">
+              <button type="submit" name="add_Sc" class="btn btn-sm btn-primary">选课</button>
+                </form>
+            </td>
+      </tr>
+      {% endif %}
+
+      {% endfor %}
+    </tbody>
+  </table>
+        {% if user.is_superuser %}
+         <h2>添加课程</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" name="add_course" class="btn btn-primary">保存</button>
+        </form>
+        {% endif %}
+    </div>
+    <div class="col-1"></div>
+</div>
+{% endblock %}

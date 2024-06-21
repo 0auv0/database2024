@@ -1,0 +1,95 @@
+{%extends "base.html" %}
+{% block mainbody %}
+<div class="error ">
+        {% for message in messages %}
+        <div class="alert alert-danger alert-dismissible fade show">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <strong>{{ message }}</strong>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="row container-fuild h4 p-3">
+        <div class="col-1"></div>
+        <div class="col-10 border border-4 p-2">
+            {% for p in person %}
+                {% if user.is_superuser %}
+                <div class="container-fuild border border-dark m-2 p-1" >
+                     <form method="post" style="display:inline;">
+                        {% csrf_token %}
+                    <div>
+                        <label>学号：</label>
+                        <input name="sid" value="{{ p.0 }}">
+                    </div>
+
+                    <div>
+                        <label>姓名：</label>
+                        <input  name="sname" value="{{ p.1 }}">
+                    </div>
+
+                    <div>
+                        <label>性别：</label>
+                        <input name="sex" value="{{ p.2 }}">
+                    </div>
+
+                         <div>
+                        <label>入学年份（如果要修改）：</label>
+                        <input name="getdate" type="date" value="{{ p.3 }}">
+                    </div>
+                        <div>
+                        <label>原入学年份：{{p.3}}</label>
+                    </div>
+                         <div>
+                        <label>专业号：</label>
+                        <input name="pid" value="{{ p.4 }}">
+                    </div>
+
+                         <div>
+                        <label>电话号码：</label>
+                        <input name="phone" value="{{ p.5 }}">
+                    </div>
+
+                         <div>
+                        <label>邮箱：</label>
+                        <input name="email" value="{{ p.6 }}">
+                    </div>
+
+                        <button type="submit" name="edit_stu" class="btn btn-sm btn-primary">编辑</button>
+                        <button type="submit" name="delete_stu" class="btn btn-sm btn-danger">删除</button>
+
+                    </form>
+                    </div>
+                {% else %}
+                <div class="card">
+                    <div class="card-body">
+                        <img src="/static/img/{{user.username}}.jpg" id="pic">
+                    <h3 class="card-title">学号：{{p.0}} 姓名：{{p.1}}</h3>
+                        <p class="card-text">性别：{{p.2}}</p>
+                        <p class="card-text">入学年份：{{p.3}}</p>
+                        <p class="card-text">当前专业：{{p.8}}</p>
+                        <p class="card-text">所属学院：{{p.9}}</p>
+                        <p class="card-text">联系电话：{{p.5}}</p>
+                        <p class="card-text">联系邮箱：{{p.6}}</p>
+
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+            {% if user.is_superuser %}
+         <h2>添加学生</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" name="add_stu" class="btn btn-primary">保存</button>
+        </form>
+            {% else %}
+            <h2>上传个人头像</h2>
+            <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <p>选择图片：<input type="file" name="img"></p>
+            <p><input type="submit" value="上传头像" name="add_img"></p>
+            </form>
+        {% endif %}
+        </div>
+        <div class="col-1"></div>
+    </div>
+{% endblock %}
